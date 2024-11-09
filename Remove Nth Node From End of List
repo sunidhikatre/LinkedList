@@ -1,0 +1,28 @@
+Initialize two pointers: Set both slow and fast to the head of the list.
+Advance the fast pointer: Move the fast pointer n nodes ahead.
+Edge case: If fast is null after moving n steps, remove the head node (return head.next).
+Move both pointers: Move both slow and fast one step at a time until fast reaches the end of the list.
+Remove the nth node: Adjust slow.next to skip the nth node from the end (slow.next = slow.next.next) and return the modified list.
+
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode slow = head;
+        ListNode fast = head;
+
+        for(int i = 0; i < n; i++) {
+            fast = fast.next;
+        }
+        if(fast==null) {
+            return head.next;
+        }
+
+        while(fast.next != null) {
+            fast = fast.next;
+            slow = slow.next;
+        }
+
+        slow.next= slow.next.next;
+
+        return head;
+    }
+}
