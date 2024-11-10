@@ -1,0 +1,52 @@
+Calculate the lengths of both linked lists, l1 and l2.
+Move the pointer of the longer list ahead by the difference in lengths, diff.
+Traverse both lists together, advancing one node at a time in each list.
+If the pointers meet (i.e., headA == headB), an intersection is found, and we return that node.
+If no intersection is found by the end of the traversal, return null.
+
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        int l1 = 0;
+        int l2 = 0;
+        int diff  = 0;
+        ListNode temp1 = headA;
+        ListNode temp2 = headB;
+        if(headA == headB){
+            return headA;
+        }
+
+        while(temp1 != null) {
+            l1++;
+            temp1 = temp1.next;
+        }
+
+        while(temp2 != null) {
+            l2++;
+            temp2 = temp2.next;
+        }
+
+        diff = Math.abs(l1-l2);
+
+        if(l2>l1) {
+            while(diff > 0){
+                 headB = headB.next;
+                 diff--;
+            }         
+        } else {
+            while(diff > 0){
+                 headA = headA.next;
+                 diff--;
+            } 
+        }
+
+        while(headA != null) {
+            if(headA == headB) {
+                return headA;
+            }
+            headA = headA.next;
+            headB = headB.next;
+        }
+        return null;
+
+    }
+}
