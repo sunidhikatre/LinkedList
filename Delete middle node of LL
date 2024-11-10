@@ -1,0 +1,43 @@
+Use slow and fast pointers, with fast moving twice as fast as slow, to locate the middle node.
+Track the prev node before slow to keep a reference for deletion.
+If the list has only one node, return null (since removing the middle leaves an empty list).
+When fast reaches the end, slow will be at the middle; use prev to bypass slow, effectively removing it.
+Return the modified head of the linked list.
+
+class Solution {
+    public ListNode deleteMiddle(ListNode head) {
+        ListNode slow = head;
+        ListNode fast = head;
+        ListNode prev = head;
+        ListNode temp = head;
+
+        int l1 = 0;
+      
+        while(temp != null){
+            l1++;
+            temp = temp.next;
+        }
+        if(l1 == 1) {
+            return null;
+        }
+
+        while(fast.next != null && fast.next.next != null) {
+            prev = slow;
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        ListNode middleNode  = null;
+       
+        if(l1 % 2 == 0) {
+            middleNode = slow.next;
+            slow.next = middleNode.next;
+        }   
+        else {
+            middleNode = slow;
+            prev.next = middleNode.next;
+        }
+        
+        return head;
+    }
+}
