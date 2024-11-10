@@ -1,0 +1,34 @@
+Traverse the list to calculate its length (l1) and connect the last node to the head to form a circular list.
+Update k as k % l1 to handle cases where k is larger than the length.
+Calculate the number of steps (diff = l1 - k) to reach the new tail node.
+Move diff - 1 steps from the head, set the new head, and break the circular link.
+Return the new head.
+
+class Solution {
+    public ListNode rotateRight(ListNode head, int k) {
+        int l1 = 1;
+        ListNode temp = head;
+        if(head == null) {
+            return null;
+        }
+        while(temp.next != null) {
+            l1++;
+            temp = temp.next;
+        }
+        k = k % l1;
+        if(k == 0) {
+            return head;
+        }
+        int diff = l1 - k;
+
+        temp.next = head;
+        ListNode temp1 = head;
+        while(diff > 1) {
+            temp1 = temp1.next;
+            diff--;
+        }
+        head= temp1.next;
+        temp1.next = null;
+        return head;
+    }
+}
