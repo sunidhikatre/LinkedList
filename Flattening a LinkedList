@@ -1,0 +1,51 @@
+The merge function merges two sorted linked lists, a and b, into a single sorted list, using bottom pointers to maintain continuity.
+A dummy node dummyNode is used as a placeholder to build the merged list.
+A loop compares the nodes of lists a and b, attaching the smaller node to the result list and advancing in that list.
+When one list is fully traversed, the remaining nodes from the other list are appended to the result list.
+The merged sorted list is returned starting from dummyNode.bottom.
+The flatten function recursively flattens the list by merging each node’s next list with the previous result.
+If the root or root.next is null, flatten returns the root as there’s nothing to flatten.
+Otherwise, it recursively calls flatten on root.next to flatten all subsequent lists.
+Then, it merges the current root list with the flattened root.next list using the merge function.
+The result is a single, bottom-linked, flattened sorted list, starting from root.
+
+class Solution {
+    
+    Node merge(Node a, Node b) {
+  
+        Node dummyNode = new Node(-1);
+        Node res = dummyNode;
+        
+        while(a != null && b!=null) {
+            if(a.data < b.data) {
+                res.bottom = a;
+                res = res.bottom;
+                a = a.bottom;
+            } else {
+                res.bottom = b;
+                res = res.bottom;
+                b = b.bottom;
+            }
+        }
+        
+        if(a != null){
+            res.bottom = a;
+        } else {
+            res.bottom = b;
+        }
+        
+        return dummyNode.bottom;
+        
+    }
+    // Function to flatten a linked list
+    Node flatten(Node root) {
+        
+        if(root == null || root.next == null) {
+            return root;
+        }
+        Node mergedHead = flatten(root.next);
+        root = merge(root, mergedHead);
+        return root;
+        
+    }
+}
