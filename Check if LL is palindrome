@@ -1,0 +1,54 @@
+Edge case check: If the list is empty or has only one node, return true (it's trivially a palindrome).
+Find the midpoint: Use fast and slow pointers to locate the middle of the list.
+Reverse the second half: Reverse the list from the node after the midpoint (slow.next) to get the second half of the list in reverse order.
+Compare the halves: Starting from the head and the reversed second half, check if corresponding nodes are equal. If any nodes don’t match, return false.
+Restore the list and return: Reverse the second half back to its original order, then return true if all node values matched.
+
+class Solution {
+
+     public ListNode reverseList(ListNode head) {
+        ListNode curr = head;
+        ListNode prev = null;
+        ListNode next=null;
+
+        while(curr != null) {
+            next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+        }
+        return prev;
+    }
+
+
+    public boolean isPalindrome(ListNode head) {
+        if(head == null || head.next == null){
+            return true;
+        }
+        ListNode fast = head;
+        ListNode slow = head;
+
+        while(fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        ListNode newHead = reverseList(slow.next);
+
+        ListNode first = head;
+        ListNode second = newHead;
+
+        while(second != null) {
+            if(first.val != second.val) {
+                return false;
+            }
+            first = first.next;
+            second = second.next;
+        }
+        reverseList(newHead);
+
+        return true;
+
+
+    }
+}
