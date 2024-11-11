@@ -1,0 +1,62 @@
+Identify the k-th Node: Use findkthNode to locate the k-th node from the current position. If it doesn’t exist, return since there aren’t enough nodes left to reverse.
+
+Break Link: Temporarily break the link after the k-th node, marking it as the end of the segment.
+
+Reverse the Segment: Reverse the segment of k nodes, and connect this reversed segment to the previous part of the list.
+
+Update Pointers: Set up the new prevNode to the last node in the reversed segment, then repeat the process from the next unreversed node.
+
+Return New Head: After all groups are processed, return the modified head as the new start of the reversed list.
+
+class Solution {
+    public ListNode findkthNode(ListNode temp1, int k) {
+        while(k > 1 && temp1 !=null) {
+            temp1 = temp1.next;
+            k--;
+        }
+        return temp1;
+    }
+
+    public ListNode reverse(ListNode temp2) {
+        ListNode curr = temp2;
+        ListNode prev = null;
+        ListNode next = null;
+
+        while(curr != null) {
+            next = curr.next;
+            curr.next = prev;
+            prev= curr;
+            curr = next;
+        }
+       return prev;
+    }
+
+    public ListNode reverseKGroup(ListNode head, int k) {
+        if (head == null || k == 1) return head;
+        ListNode temp = head;
+        ListNode prevNode = null;
+
+        while(temp != null) {
+            ListNode kthNode = findkthNode(temp, k);
+
+            if(kthNode == null) {
+                prevNode.next = temp;
+                break;
+            }
+
+            ListNode newNode = kthNode.next;
+            kthNode.next = null;
+            ListNode reverseHead = reverse(temp);
+
+            if(temp == head) {
+                head = kthNode;
+            } else {
+                prevNode.next = kthNode;
+               
+            }
+            prevNode = temp;
+            temp = newNode;
+        }
+        return head;
+    }
+}
