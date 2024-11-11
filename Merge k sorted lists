@@ -1,0 +1,51 @@
+PriorityQueue Initialization: We initialize the PriorityQueue with a custom comparator (a, b) -> a.val - b.val, which compares the val fields of the Pair objects to ensure the smallest node is always at the top of the queue.
+
+Adding Nodes to the PriorityQueue: During the loop, we add the first node of each linked list (if not null) into the PriorityQueue. This ensures the PriorityQueue contains the smallest element at the top.
+
+Building the Merged List:
+
+We pop the smallest element from the PriorityQueue and add it to the merged list.
+If the node has a next node, we add that next node to the PriorityQueue.
+Returning the Merged List: Finally, we return dummy.next as the result list, which points to the first element of the merged list.
+
+Time Complexity:
+Time complexity: O(N * log K), where N is the total number of nodes across all k linked lists and K is the number of lists. Each operation of inserting or removing an element from the priority queue takes O(log K), and we perform these operations N times.
+
+Space complexity: O(K), where K is the number of linked lists, as the priority queue holds at most K elements at any given time.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+class Pair {
+    int val;
+    ListNode node;
+    Pair(int val, ListNode node) {
+        this.val = val;
+        this.node = node;
+    }
+}
+class Solution {
+    public ListNode mergeKLists(ListNode[] lists) {
+        PriorityQueue<Pair> pq = new PriorityQueue<>((a, b) -> a.val - b.val);
+
+        for(int i = 0; i < lists.length; i++) {
+            if(lists[i] != null) {
+                pq.add(new Pair(lists[i].val, lists[i]));
+            }         
+        }
+
+        ListNode dummy = new ListNode(-1);
+        ListNode current = dummy;
+
+        while(!pq.isEmpty()) {
+            Pair smallestPair = pq.poll();
+            current.next = smallestPair.node;
+            current = current.next;
+
+            if(smallestPair.node.next != null) {
+                pq.add(new Pair(smallestPair.node.next.val, smallestPair.node.next));
+            }
+        }
+
+        return dummy.next;
+
+    }
+}
