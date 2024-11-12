@@ -1,0 +1,59 @@
+Base Case: If the list is empty or has only one node, return it as it's already sorted.
+Find Middle: Use the findMiddle function to split the list into two halves by finding the middle node.
+Split List: Separate the list into two parts, left and right, with middle.next = null.
+Recursive Sort: Recursively apply sortList to sort both the left and right halves.
+Merge Sorted Halves: Use mergeTwoLists to merge the sorted left and right halves into a single sorted list, then return the merged list.
+
+class Solution {
+
+    public ListNode mergeTwoLists(ListNode leftSorted, ListNode rightSorted) {
+        ListNode dummyNode = new ListNode(-1);
+        ListNode temp = dummyNode;
+
+        while(leftSorted != null  && rightSorted != null) {
+            if(leftSorted.val < rightSorted.val) {
+                temp.next = leftSorted;
+                temp = temp.next;
+                leftSorted = leftSorted.next;
+            } else {
+                temp.next = rightSorted;
+                temp = temp.next;
+                rightSorted = rightSorted.next;
+            }
+            if(leftSorted != null) {
+                temp.next = leftSorted;
+            } else {
+                temp.next = rightSorted;
+            }
+        }
+        return dummyNode.next;
+    }
+
+    ListNode findMiddle(ListNode head) {
+        ListNode slow = head;
+        ListNode fast = head.next;
+
+        while(fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return slow;
+    }
+
+    public ListNode sortList(ListNode head) {
+        if(head == null || head.next == null) {
+            return head;
+        } 
+
+        ListNode middle = findMiddle(head);
+        ListNode leftHead = head;
+        ListNode rightHead = middle.next;
+        middle.next = null;
+
+        ListNode leftSorted = sortList(leftHead);
+        ListNode rightSorted = sortList(rightHead);
+
+        ListNode merged = mergeTwoLists(leftSorted, rightSorted);
+        return merged;
+    }
+}
