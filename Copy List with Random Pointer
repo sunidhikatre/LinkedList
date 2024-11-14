@@ -1,0 +1,38 @@
+Create Copies: For each original node, create a copy node immediately following it in the list (e.g., A -> A' -> B -> B').
+Set Random Pointers: For each original node's copy, set its random pointer by referring to the original node’s random pointer's next node (to reach the copy node).
+Separate Lists: Split the interwoven list of original and copied nodes by reconnecting the original nodes and extracting the copied nodes.
+Reconstruct Original List: Adjust the next pointers of the original nodes to maintain their structure.
+Return Copied List: Return the head of the copied list.
+
+class Solution {
+    public Node copyRandomList(Node head) {
+        Node temp = head;
+        while(temp != null) {
+            Node copyNode = new Node(temp.val);
+            copyNode.next = temp.next;
+            temp.next = copyNode;
+            temp = temp.next.next; 
+        }
+
+        temp = head;
+        while(temp != null) {
+            Node copyNode = temp.next;
+            if(temp.random != null) {
+                copyNode.random = temp.random.next;  //temp ke random ke next me uska copy hai since we want to point to random of copy node we take next
+            }
+            temp = temp.next.next;
+        }
+
+        Node dummyNode = new Node(-1);
+        Node res = dummyNode;
+        temp = head;
+
+        while(temp != null) {
+            res.next = temp.next;
+            temp.next = temp.next.next;
+            res= res.next;
+            temp = temp.next;
+        } 
+        return dummyNode.next;
+    }
+}
